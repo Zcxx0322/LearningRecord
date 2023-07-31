@@ -2,16 +2,14 @@
 #  -*- coding:utf8 -*-
 #  Copyright(C) 2023-2024 colamps
 
-from urllib.parse import parse_qs, unquote
-
 
 def split_request(http_message):
-    http_up = http_message.split('\r\n\r\n')
-    return http_up
+    http_all = http_message.split('\r\n\r\n')
+    return http_all
 
 
-def get_request_line(http_up):
-    request_line_part = http_up[0].split('\r\n')
+def get_request_line(http_split):
+    request_line_part = http_split[0].split('\r\n')
     request_line = request_line_part[0].split(' ')
     request_method = request_line[0]
     request_url = request_line[1]
@@ -19,8 +17,8 @@ def get_request_line(http_up):
     return request_method, request_url, request_version
 
 
-def get_request_header(http_up):
-    request_header_part = http_up[0].split('\r\n')
+def get_request_header(http_all):
+    request_header_part = http_all[0].split('\r\n')
     request_header = request_header_part[1:]
     headers_str = ""
 
@@ -33,8 +31,8 @@ def get_request_header(http_up):
     return headers_str
 
 
-def get_body_main(http_lines):
-    request_body = http_lines[-1]
+def get_body_main(http_split):
+    request_body = http_split[-1]
     params = {}
     for param in request_body.split('&'):
         key, value = param.split('=')
@@ -56,14 +54,14 @@ def main():
                    "_csrf=da80f997-a389-4483-bac8-34d9812c72d6&username=3611744356%4@qq.com" \
                    "&password=0322&signin=%E9%A9%AC%E4%B8%8A%E7%99%BB%E5%BD%95"
     # 以\r\n切片
-    http_lines = split_request(http_message)
+    http_split = split_request(http_message)
 
-    request_lines = get_request_line(http_lines)
+    request_lines = get_request_line(http_split)
     print("RequestMethod:", request_lines[0])
     print("RequestURL:", request_lines[1])
     print("ProtocolVersion:", request_lines[2])
 
-    request_headers = get_request_header(http_lines)
+    request_headers = get_request_header(http_split)
     print(request_headers)
 
     http_body = split_request(http_message)
@@ -71,7 +69,7 @@ def main():
 
     print('-------------------------------------------')
 
-    main_info = get_body_main(http_lines)
+    main_info = get_body_main(http_split)
     print('Username:', main_info[0])
     print('Passworc:', main_info[1])
 
