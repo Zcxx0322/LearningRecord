@@ -1,7 +1,6 @@
 #  !/home/colamps/workspace/pythonProject/test
 #  -*- coding:utf8 -*-
 #  Copyright(C) 2023-2024 colamps
-#  FastCGI测试代码
 
 from flup.server.fcgi import WSGIServer
 
